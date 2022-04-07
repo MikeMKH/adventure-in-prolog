@@ -1,13 +1,21 @@
-male(jack).
+female(diana).
+female(ann).
+female(cindy).
+female(kim).
+female(kelsey).
 female(lily).
 
-male(mike).
-female(kelsey).
-
-female(kim).
-
+male(robert).
+male(walter).
 male(jim).
-female(cindy).
+male(mike).
+male(jack).
+
+parent(robert, cindy).
+parent(diana, cindy).
+
+parent(walter, jim).
+parent(ann, jim).
 
 parent(jim, mike).
 parent(jim, kim).
