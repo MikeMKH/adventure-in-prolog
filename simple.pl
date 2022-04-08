@@ -14,3 +14,16 @@ harder(a,1).
 harder(c,X).
 harder(b,4).
 harder(d,2).
+
+a(a1, 1).
+a(A, 2).
+a(a3, N).
+
+b(1, b1).
+b(2, B).
+b(N, b3).
+
+c(X, Y) :- a(X, N), b(N, Y).
+
+d(X, Y) :- a(N, X), b(Y, N).
+d(X, Y) :- a(X, N), b(N, Y).
