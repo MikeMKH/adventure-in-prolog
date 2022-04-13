@@ -6,6 +6,10 @@ room(cellar).
 
 location(desk, office).
 location(flashlight, desk).
+location(envelope, desk).
+location(paperclip, desk).
+location(stamp, envelope).
+location(key, envelope).
 location(apple, kitchen).
 location('washing machine', cellar).
 location(nani, 'washing machine').
@@ -80,7 +84,7 @@ take(Item) :-
 
 can_take(Item) :-
   here(Place),
-  location(Item, Place).
+  is_contained_in(Item, Place).
 can_take(Item) :-
   write('There is no '),write(Item),write(' here.'),nl,
   fail.
@@ -160,3 +164,65 @@ close_door_object(Place) :-
   retract(door(Place, _)),
   asserta(door(Place, _)),
   write('You have closed the door.'),nl.
+
+is_contained_in(Place, Container) :-
+  location(Place, Container).
+is_contained_in(Place, Container) :-
+  location(Place, X),
+  is_contained_in(X, Container).
+% is_contained_in(Place, Container) :-
+%   location(X, Container),
+%   is_contained_in(Place, X).
+
+% is_contained_in(X, Container).
+% [trace]  ?- is_contained_in(key, office).
+%    Call: (10) is_contained_in(key, office) ? creep
+%    Call: (11) location(key, office) ? creep
+%    Fail: (11) location(key, office) ? creep
+%    Redo: (10) is_contained_in(key, office) ? creep
+%    Call: (11) location(key, _38232) ? creep
+%    Exit: (11) location(key, envelope) ? creep
+%    Call: (11) is_contained_in(envelope, office) ? creep
+%    Call: (12) location(envelope, office) ? creep
+%    Fail: (12) location(envelope, office) ? creep
+%    Redo: (11) is_contained_in(envelope, office) ? creep
+%    Call: (12) location(envelope, _42758) ? creep
+%    Exit: (12) location(envelope, desk) ? creep
+%    Call: (12) is_contained_in(desk, office) ? creep
+%    Call: (13) location(desk, office) ? creep
+%    Exit: (13) location(desk, office) ? creep
+%    Exit: (12) is_contained_in(desk, office) ? creep
+%    Exit: (11) is_contained_in(envelope, office) ? creep
+%    Exit: (10) is_contained_in(key, office) ? creep
+% true .
+
+% is_contained_in(Place, X).
+% [trace]  ?- is_contained_in(key, office).
+%    Call: (10) is_contained_in(key, office) ? creep
+%    Call: (11) location(key, office) ? creep
+%    Fail: (11) location(key, office) ? creep
+%    Redo: (10) is_contained_in(key, office) ? creep
+%    Call: (11) location(_60498, office) ? creep
+%    Exit: (11) location(desk, office) ? creep
+%    Call: (11) is_contained_in(key, desk) ? creep
+%    Call: (12) location(key, desk) ? creep
+%    Fail: (12) location(key, desk) ? creep
+%    Redo: (11) is_contained_in(key, desk) ? creep
+%    Call: (12) location(_65024, desk) ? creep
+%    Exit: (12) location(flashlight, desk) ? creep
+%    Call: (12) is_contained_in(key, flashlight) ? creep
+%    Call: (13) location(key, flashlight) ? creep
+%    Fail: (13) location(key, flashlight) ? creep
+%    Redo: (12) is_contained_in(key, flashlight) ? creep
+%    Call: (13) location(_69550, flashlight) ? creep
+%    Fail: (13) location(_69550, flashlight) ? creep
+%    Fail: (12) is_contained_in(key, flashlight) ? creep
+%    Redo: (12) location(_65024, desk) ? creep
+%    Exit: (12) location(envelope, desk) ? creep
+%    Call: (12) is_contained_in(key, envelope) ? creep
+%    Call: (13) location(key, envelope) ? creep
+%    Exit: (13) location(key, envelope) ? creep
+%    Exit: (12) is_contained_in(key, envelope) ? creep
+%    Exit: (11) is_contained_in(key, desk) ? creep
+%    Exit: (10) is_contained_in(key, office) ? creep
+% true .
