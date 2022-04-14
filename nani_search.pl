@@ -4,18 +4,18 @@ room(hall).
 room('dinning room').
 room(cellar).
 
-location(desk, office).
-location(flashlight, desk).
-location(envelope, desk).
-location(paperclip, desk).
-location(stamp, envelope).
-location(key, envelope).
-location(apple, kitchen).
-location('washing machine', cellar).
-location(nani, 'washing machine').
-location(cheese, kitchen).
-location(crackers, kitchen).
-location(computer, office).
+location(object(desk, heavy), office).
+location(object(flashlight, light), object(desk, heavy)).
+location(object(envelope, light), object(desk, heavy)).
+location(object(paperclip, light), object(desk, heavy)).
+location(object(stamp, light), object(envelope, light)).
+location(object(key, light), object(envelope, light)).
+location(object(apple, light), kitchen).
+location(object('washing machine', heavy), cellar).
+location(object(nani, light), object('washing machine', heavy)).
+location(object(cheese, light), kitchen).
+location(object(crackers, light), kitchen).
+location(object(computer, heavy), office).
 
 door(office, hall).
 door(kitchen, office).
@@ -30,7 +30,7 @@ poison(cheese).
 
 turned_off(flashlight).
 
-have(nothing).
+have(object(nothing, none)).
 here(kitchen).
 
 where_food(Food) :-
@@ -42,7 +42,7 @@ connect(Place1, Place2) :- door(Place1, Place2).
 connect(Place1, Place2) :- door(Place2, Place1).
 
 list_things(Place) :-
-  location(Item, Place),
+  location(object(Item, _), Place),
   tab(2),
   write(Item),
   nl,
@@ -84,13 +84,16 @@ take(Item) :-
 
 can_take(Item) :-
   here(Place),
-  is_contained_in(Item, Place).
-can_take(Item) :-
+  is_contained_in(object(Item, light), Place).
+can_take(object(Item, light)) :-
   write('There is no '),write(Item),write(' here.'),nl,
+  fail.
+can_take(object(Item, heavy)) :-
+  write('The '),write(Item),write(' is too heavy.'),nl,
   fail.
 
 take_object(Item) :-
-  retract(location(Item, _)),
+  retract(location(object(Item, _), _)),
   asserta(have(Item)),
   write('You now have the '),write(Item),write('.'),nl.
 
@@ -105,7 +108,7 @@ put_object(Item) :-
   having(Item),
   here(Place),
   retract(have(Item)),
-  asserta(location(Item, Place)),
+  asserta(location(object(Item, light), Place)),
   write('You have put the '),write(Item),write(' in  '),write(Place),write('.'),nl.
 
 having(Item) :-
@@ -113,7 +116,7 @@ having(Item) :-
 
 inventory :-
   write('You have:'),nl,
-  having(Item),
+  having(object(Item, _)),
   tab(2),
   write(Item),
   nl,
