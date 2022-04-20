@@ -37,6 +37,7 @@ where_food(Food) :-
   edible(Food),
   here(Place),
   location(Food, Place).
+:- op(35, fx, where_food).
 
 connect(Place1, Place2) :- door(Place1, Place2).
 connect(Place1, Place2) :- door(Place2, Place1).
@@ -48,6 +49,7 @@ list_things(Place) :-
   nl,
   fail.
 list_things(_).
+:- op(35, fx, list_things).
 
 list_connections(Place) :-
   connect(Place, NextPlace),
@@ -56,6 +58,7 @@ list_connections(Place) :-
   nl,
   fail.
 list_connections(_).
+:- op(35, fx, list_connections).
 
 look :-
   here(Place),
@@ -69,6 +72,7 @@ goto(Place) :-
   can_go(Place),
   move(Place),
   look.
+:- op(35, fx, goto).
 
 can_go(Place) :-
   here(Here),
@@ -81,6 +85,7 @@ move(Place) :-
 take(Item) :-
   can_take(Item),
   take_object(Item).
+:- op(35, fx, take).
 
 can_take(Item) :-
   here(Place),
@@ -96,10 +101,12 @@ take_object(Item) :-
   retract(location(object(Item, _), _)),
   asserta(have(Item)),
   write('You now have the '),write(Item),write('.'),nl.
+:- op(35, fx, take_object).
 
 put(Item) :-
   can_put(Item),
   put_object(Item).
+:- op(35, fx, put).
 
 can_put(Item) :-
   having(Item).
@@ -125,6 +132,7 @@ inventory :-
 turn_on(Item) :-
   can_turn_on(Item),
   turn_on_object(Item).
+:- op(35, fx, turn_on).
 
 can_turn_on(Item) :-
   turned_off(Item).
@@ -136,6 +144,7 @@ turn_on_object(Item) :-
 turn_off(Item) :-
   can_turn_off(Item),
   turn_off_object(Item).
+:- op(35, fx, turn_off).
 
 can_turn_off(Item) :-
   turned_off(Item).
@@ -147,6 +156,7 @@ turn_off_object(Item) :-
 open_door(Place) :-
   can_open_door(Place),
   open_door_object(Place).
+:- op(35, fx, open_door).
 
 can_open_door(Place) :-
   door(Place, _).
