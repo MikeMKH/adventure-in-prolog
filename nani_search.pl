@@ -42,6 +42,15 @@ where_food(Food) :-
 connect(Place1, Place2) :- door(Place1, Place2).
 connect(Place1, Place2) :- door(Place2, Place1).
 
+puzzle(goto(cellar)) :-
+  have(flashlight),
+  turn_on(flashlight),
+  !.
+puzzle(goto(cellar)) :-
+  write('It is too dark to go in the cellar.'), nl,
+  !,fail.
+puzzle(_).
+
 list_things(Place) :-
   location(object(Item, _), Place),
   tab(2),
@@ -69,6 +78,7 @@ look :-
   list_connections(Place).
 
 goto(Place) :-
+  puzzle(goto(Place)),
   can_go(Place),
   move(Place),
   look.
